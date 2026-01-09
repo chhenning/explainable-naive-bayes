@@ -1,0 +1,7 @@
+[project]
+name = "explainable-naive-bayes"
+version = "0.1.0"
+description = "A simple, explainable Naive Bayes text classifier focused on transparency and first principles, written in plain Python."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["ipykernel"]

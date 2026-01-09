@@ -1,0 +1,66 @@
+{
+  "train": [
+    {
+      "id": "train_001",
+      "label": "comp.graphics",
+      "text": "I am trying to understand how ray tracing differs from rasterization. Most tutorials explain the math, but I am confused about performance trade-offs on modern GPUs."
+    },
+    {
+      "id": "train_002",
+      "label": "comp.graphics",
+      "text": "Does anyone have experience with OpenGL shaders for real-time lighting? I am specifically interested in implementing Phong shading efficiently."
+    },
+    {
+      "id": "train_003",
+      "label": "sci.space",
+      "text": "The James Webb Space Telescope has significantly improved our ability to study exoplanet atmospheres. The infrared instruments are producing incredible data."
+    },
+    {
+      "id": "train_004",
+      "label": "sci.space",
+      "text": "What are the main engineering challenges of long-duration space missions to Mars? Radiation exposure seems to be a major issue."
+    },
+    {
+      "id": "train_005",
+      "label": "rec.sport.baseball",
+      "text": "The team’s bullpen has been struggling this season. Several late-inning losses could have been avoided with better relief pitching."
+    },
+    {
+      "id": "train_006",
+      "label": "rec.sport.baseball",
+      "text": "Advanced statistics like WAR and OPS have changed how teams evaluate players compared to traditional batting averages."
+    },
+    {
+      "id": "train_007",
+      "label": "talk.politics.guns",
+      "text": "The debate around gun control often focuses on balancing individual rights with public safety. Recent legislation has reignited this discussion."
+    },
+    {
+      "id": "train_008",
+      "label": "talk.politics.guns",
+      "text": "Some argue that stricter background checks could reduce gun violence, while others believe enforcement of existing laws is the real issue."
+    }
+  ],
+  "test": [
+    {
+      "id": "test_001",
+      "label": "comp.graphics",
+      "text": "I am comparing Vulkan and OpenGL for a new rendering engine. Vulkan seems more complex but promises better control over GPU resources."
+    },
+    {
+      "id": "test_002",
+      "label": "sci.space",
+      "text": "Satellite constellations in low Earth orbit are raising concerns about space debris and long-term sustainability of orbital environments."
+    },
+    {
+      "id": "test_003",
+      "label": "rec.sport.baseball",
+      "text": "Pitch count limits for starting pitchers are meant to prevent injuries, but some fans feel it hurts the flow of the game."
+    },
+    {
+      "id": "test_004",
+      "label": "talk.politics.guns",
+      "text": "Public opinion on firearm regulation varies widely by region, often influenced by cultural and historical factors."
+    }
+  ]
+}
