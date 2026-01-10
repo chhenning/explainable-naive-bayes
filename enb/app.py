@@ -1,3 +1,6 @@
+import argparse
+from pprint import pprint
+
 from enb import Classifier, create_dataset_from_json, accuracy
 
 
@@ -18,4 +21,23 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="Text Classification using Naive Bayes."
+    )
+
+    commands_subparser = parser.add_subparsers(dest="command")
+    show_subparser = commands_subparser.add_parser(name="ls")
+
+    # run_subparser = parser.add_subparsers(dest="run")
+    # run_subparser.add_argument("-ds", "--dataset", type=str, required=True)
+
+    kwargs = vars(parser.parse_args())
+    command = kwargs.pop("command")
+
+    if command == "ls":
+        print(f"{'DATASET NAME':<15}  DESCRIPTION")
+        print(f"{'------------':<15}  -----------")
+        print(f"{'fake_newsgroup':<15}  Simple default test dataset")
+        print(f"{'20_newsgroupsE':<15}  Sklearn exported dataset (23MB)")
+
+    # main()
