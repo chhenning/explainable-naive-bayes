@@ -1,9 +1,15 @@
 from collections import defaultdict, Counter
-from typing import Dict, Optional, Any
+from typing import Dict
 import math
 
-
-from collections import defaultdict, Counter
+from enb.printing_helpers import (
+    _fmt_float,
+    _fmt_int,
+    _print_kv,
+    _print_section,
+    _print_table,
+    _truncate,
+)
 
 # def stats(self, top_n=10):
 #     # print("=== Classifier Stats ===")
@@ -118,73 +124,14 @@ class Stats:
     def add_results(self, probs: Dict[str, float]):
         self.probs = probs
 
-    # ---------------- Pretty printing helpers ----------------
-
-    @staticmethod
-    def _fmt_float(x: Optional[float], digits: int = 6) -> str:
-        if x is None:
-            return "—"
-        try:
-            if isinstance(x, float) and (math.isnan(x) or math.isinf(x)):
-                return str(x)
-            return f"{x:.{digits}f}"
-        except Exception:
-            return str(x)
-
-    @staticmethod
-    def _fmt_int(x: Optional[int]) -> str:
-        if x is None:
-            return "—"
-        try:
-            return f"{int(x):,}"
-        except Exception:
-            return str(x)
-
-    @staticmethod
-    def _truncate(s: Optional[str], max_len: int = 140) -> str:
-        if not s:
-            return ""
-        s = " ".join(s.split())  # collapse whitespace
-        return s if len(s) <= max_len else s[: max_len - 1] + "…"
-
-    @staticmethod
-    def _print_section(title: str) -> None:
-        print()
-        print(title)
-        print("-" * len(title))
-
-    @staticmethod
-    def _print_kv(rows: list[tuple[str, str]]) -> None:
-        if not rows:
-            return
-        key_w = max(len(k) for k, _ in rows)
-        for k, v in rows:
-            print(f"{k:<{key_w}} : {v}")
-
-    @staticmethod
-    def _print_table(headers: list[str], rows: list[list[Any]]) -> None:
-        if not headers:
-            return
-        # Convert all cells to strings
-        srows = [[("" if c is None else str(c)) for c in r] for r in rows]
-        widths = [len(h) for h in headers]
-        for r in srows:
-            for i, c in enumerate(r):
-                widths[i] = max(widths[i], len(c))
-
-        def fmt_row(r: list[str]) -> str:
-            return "  ".join(f"{c:<{widths[i]}}" for i, c in enumerate(r))
-
-        print(fmt_row(headers))
-        print("  ".join("-" * w for w in widths))
-        for r in srows:
-            print(fmt_row(r))
-
-    # ---------------- Main printer ----------------
-
     def print_to_output(self, top_n_words: int = 10) -> None:
+        """
+        Prints the stats to the output.
+
+        :param top_n_words: Number of words to show in the word contributions.
+        """
         # General
-        self._print_section("Stats")
+        _print_section("Stats")
         vocab_size = None
         if self.vocab is not None:
             try:
@@ -199,19 +146,19 @@ class Stats:
             doc_token_count = sum(doc_vocab.values())
             doc_unique = len(doc_vocab)
 
-        self._print_kv(
+        _print_kv(
             [
-                ("num_docs_trained", self._fmt_int(self.num_docs)),
-                ("vocab_size", self._fmt_int(vocab_size)),
-                ("doc_tokens", self._fmt_int(doc_token_count)),
-                ("doc_unique_tokens", self._fmt_int(doc_unique)),
-                ("doc_preview", self._truncate(self.doc, 200)),
+                ("num_docs_trained", _fmt_int(self.num_docs)),
+                ("vocab_size", _fmt_int(vocab_size)),
+                ("doc_tokens", _fmt_int(doc_token_count)),
+                ("doc_unique_tokens", _fmt_int(doc_unique)),
+                ("doc_preview", _truncate(self.doc, 200)),
             ]
         )
 
         # Docs by category + priors
         if self.num_docs_by_category or self.cat_priors:
-            self._print_section("Categories")
+            _print_section("Categories")
             cats = sorted(
                 set(self.num_docs_by_category.keys()) | set(self.cat_priors.keys())
             )
@@ -222,24 +169,24 @@ class Stats:
                 cat_rows.append(
                     [
                         c,
-                        self._fmt_int(n),
-                        self._fmt_float(lp, 6),
-                        self._fmt_float(math.exp(lp) if lp is not None else None, 6),
+                        _fmt_int(n),
+                        _fmt_float(lp, 6),
+                        _fmt_float(math.exp(lp) if lp is not None else None, 6),
                     ]
                 )
-            self._print_table(["category", "num_docs", "log_prior", "prior"], cat_rows)
+            _print_table(["category", "num_docs", "log_prior", "prior"], cat_rows)
 
         # Final probabilities
         if self.probs:
-            self._print_section("Final probabilities")
+            _print_section("Final probabilities")
             # sort descending by prob
             items = sorted(self.probs.items(), key=lambda kv: kv[1], reverse=True)
-            prob_rows = [[c, self._fmt_float(p, 6)] for c, p in items]
-            self._print_table(["category", "P(category|doc)"], prob_rows)
+            prob_rows = [[c, _fmt_float(p, 6)] for c, p in items]
+            _print_table(["category", "P(category|doc)"], prob_rows)
 
         # Word contributions per category
         if self.word_contributions:
-            self._print_section(f"Top word contributions (top_n_words={top_n_words})")
+            _print_section(f"Top word contributions (top_n_words={top_n_words})")
 
             for category in sorted(self.word_contributions.keys()):
                 contribs = self.word_contributions.get(category, [])
@@ -270,14 +217,14 @@ class Stats:
                     rows.append(
                         [
                             d.get("word", ""),
-                            self._fmt_int(d.get("word_count")),
-                            self._fmt_int(d.get("word_count_in_cat")),
-                            self._fmt_float(d.get("P(word|category)"), 8),
-                            self._fmt_float(d.get("log_contrib"), 6),
+                            _fmt_int(d.get("word_count")),
+                            _fmt_int(d.get("word_count_in_cat")),
+                            _fmt_float(d.get("P(word|category)"), 8),
+                            _fmt_float(d.get("log_contrib"), 6),
                         ]
                     )
 
-                self._print_table(
+                _print_table(
                     [
                         "word",
                         "count_in_doc",

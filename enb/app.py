@@ -40,11 +40,8 @@ def main(dataset: str):
 
     ## Example of getting detailed probabilities for a single text
 
-    probs, stats = c.explain(test[0]["text"])
-    print("\nDetailed probabilities for first test document:")
-    pprint(probs)
-    pprint("\nStats:")
-    pprint(stats.to_dict(top_n_words=5))
+    stats = c.explain(test[0]["text"])
+    stats.print_to_output()
 
 
 if __name__ == "__main__":
