@@ -5,3 +5,6 @@ def accuracy(results) -> float:
     :param results: List of tuples (label, predicted label)
     """
     return sum([r[0] == r[1] for r in results]) / len(results)
+
+
+# TODO: [](metrics_todo.md)

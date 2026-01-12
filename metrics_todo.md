@@ -1,20 +1,3 @@
-# explainable-naive-bayes
-
-A simple, explainable Naive Bayes text classifier focused on transparency and first principles, written in plain Python.
-
-
-
-
-# Ideas
-
-## Improve quality
-
-- porter stemmer
-- exclude stop words
-- add bigrams
-- limit vocab size
-
-## Metrics
 
 1) Accuracy
 
@@ -66,7 +49,3 @@ Your sample data is tiny, so any single train/test split will be noisy. A better
 	•	or leave-one-out if the dataset is extremely small
 
 If you want, I can drop in a small evaluate(test_samples) helper that computes accuracy + confusion matrix + macro F1 (no sklearn), and optionally log loss using the probabilities your classifier already outputs.
-
-# Acknowledgements
-
-The original idea for this model came from `The Coding Train` [Coding Challenge 187: Bayes Theorem](https://www.youtube.com/watch?v=g3-PXyF8U70).

@@ -1,10 +1,13 @@
-.PHONY: test run setup list_datasets
+.PHONY: test help run ls
 
 test:
 	@. ./scripts/setup.sh && python -m unittest
 
-run:
-	@. ./scripts/setup.sh && python enb/app.py
+help:
+	@. ./scripts/setup.sh && clear && python enb/app.py --help
 
-list_datasets:
+run:
+	@. ./scripts/setup.sh && python enb/app.py run
+
+ls:
 	@. ./scripts/setup.sh && clear && python enb/app.py ls
