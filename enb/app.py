@@ -1,5 +1,4 @@
 import argparse
-from pprint import pprint
 import time
 
 from enb import Classifier, create_dataset_from_json, accuracy
@@ -16,7 +15,7 @@ datasets = {
 }
 
 
-def main(dataset: str):
+def main(dataset: str, doc_to_explain: str = None):
 
     start_time = time.time()
 
@@ -34,14 +33,14 @@ def main(dataset: str):
         predicted = max(probs, key=probs.get)
         results.append((t["label"], predicted))
 
-    print("Accuracy:", accuracy(results))
+    if doc_to_explain is not None:
+        stats = c.explain(doc_to_explain)
+        stats.print_to_output()
+    else:
+        print("Accuracy:", accuracy(results))
+
     end_time = time.time()
     print(f"Time taken: {end_time - start_time:.2f} seconds")
-
-    ## Example of getting detailed probabilities for a single text
-
-    stats = c.explain(test[0]["text"])
-    stats.print_to_output()
 
 
 if __name__ == "__main__":
@@ -57,12 +56,21 @@ if __name__ == "__main__":
     run_subparser = commands_subparser.add_parser(
         name="run", description="Run classification on a dataset"
     )
+
     run_subparser.add_argument(
         "-ds",
         "--dataset",
         dest="dataset",
         type=str,
         default="fake_newsgroup",
+    )
+
+    run_subparser.add_argument(
+        "-e",
+        "--explain",
+        dest="doc_to_explain",
+        type=str,
+        default=None,
     )
 
     kwargs = vars(parser.parse_args())
@@ -77,6 +85,7 @@ if __name__ == "__main__":
         ds = kwargs.pop("dataset")
         if ds not in datasets:
             raise ValueError(f"Unknown dataset: {ds}")
-        main(ds)
+
+        main(ds, **kwargs)
     else:
         raise ValueError(f"Unknown command: {command}")

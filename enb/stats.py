@@ -12,10 +12,6 @@ from enb.printing_helpers import (
 )
 
 # def stats(self, top_n=10):
-#     # print("=== Classifier Stats ===")
-#     # print(f"Total documents: {self.num_docs}")
-#     # print(f"Vocabulary size: {len(self.vocab)}\n")
-
 #     # print("Number of docs per category", dict(self.num_docs_by_category))
 
 #     for cat in self.categories:

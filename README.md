@@ -3,6 +3,11 @@
 A simple, explainable Naive Bayes text classifier focused on transparency and first principles, written in plain Python.
 
 
+# Features
+
+- chaining probability calculations using logs
+- detailed stats output
+- Laplace smoothing 
 
 
 # Ideas
