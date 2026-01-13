@@ -1,7 +1,13 @@
 import argparse
 import time
 
-from enb import Classifier, create_dataset_from_json, accuracy
+from enb import (
+    Classifier,
+    create_dataset_from_json,
+    accuracy,
+    confusion_matrix,
+    print_confusion_matrix,
+)
 
 datasets = {
     "fake_newsgroup": {
@@ -15,7 +21,7 @@ datasets = {
 }
 
 
-def main(dataset: str, doc_to_explain: str = None):
+def main(dataset: str, doc_to_explain: str = None, show_cm: bool = False):
 
     start_time = time.time()
 
@@ -23,7 +29,7 @@ def main(dataset: str, doc_to_explain: str = None):
 
     train, test = create_dataset_from_json(datasets[dataset]["path"])
 
-    c = Classifier(set(t["label"] for t in train))
+    c = Classifier(set(t["label"] for t in train), stem=True)
     for t in train:
         c.train(t["label"], t["text"])
 
@@ -38,6 +44,9 @@ def main(dataset: str, doc_to_explain: str = None):
         stats.print_to_output()
     else:
         print("Accuracy:", accuracy(results))
+        if show_cm:
+            print("\nConfusion Matrix:")
+            print_confusion_matrix(confusion_matrix(results))
 
     end_time = time.time()
     print(f"Time taken: {end_time - start_time:.2f} seconds")
@@ -66,9 +75,17 @@ if __name__ == "__main__":
     )
 
     run_subparser.add_argument(
+        "--cm",
+        dest="show_cm",
+        action="store_true",
+        help="Show confusion matrix",
+    )
+
+    run_subparser.add_argument(
         "-e",
         "--explain",
         dest="doc_to_explain",
+        help="Document to explain",
         type=str,
         default=None,
     )

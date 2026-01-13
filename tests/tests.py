@@ -1,6 +1,7 @@
 import unittest
 
 from enb.classifier import Classifier, tokenize
+from enb.metrics import confusion_matrix
 from enb.porter import PorterStemmer
 
 train_data = {
@@ -86,6 +87,25 @@ class TestClassifier(unittest.TestCase):
 
         total_tokens = {cat: sum(c.word_freq[cat].values()) for cat in c.categories}
         self.assertDictEqual(total_tokens, {"pos": 31, "neu": 21, "neg": 29})
+
+    def test_confusion_matrix(self):
+        results = [
+            ("pos", "pos"),
+            ("pos", "pos"),
+            ("pos", "neu"),
+            ("neu", "neu"),
+            ("neu", "pos"),
+            ("neg", "neg"),
+        ]
+        cm = confusion_matrix(results)
+        self.assertEqual(cm["pos"]["pos"], 2)
+        self.assertEqual(cm["pos"]["neu"], 1)
+        self.assertEqual(cm["pos"]["neg"], 0)
+        self.assertEqual(cm["neu"]["neu"], 1)
+        self.assertEqual(cm["neu"]["pos"], 1)
+        self.assertEqual(cm["neg"]["neg"], 1)
+        self.assertEqual(cm["neg"]["pos"], 0)
+
 
 
 class TestPorterStemmer(unittest.TestCase):

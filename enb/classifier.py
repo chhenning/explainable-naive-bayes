@@ -7,13 +7,39 @@ from enb.stats import Stats
 from enb.porter import PorterStemmer
 
 DEFAULT_STOP_WORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has", "he",
-    "in", "is", "it", "its", "of", "on", "that", "the", "to", "was", "were",
-    "will", "with"
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "by",
+    "for",
+    "from",
+    "has",
+    "he",
+    "in",
+    "is",
+    "it",
+    "its",
+    "of",
+    "on",
+    "that",
+    "the",
+    "to",
+    "was",
+    "were",
+    "will",
+    "with",
 }
 
 
-def tokenize(doc: str, stop_words: Optional[Set[str]] = None, stemmer: Optional[PorterStemmer] = None):
+def tokenize(
+    doc: str,
+    stop_words: Optional[Set[str]] = None,
+    stemmer: Optional[PorterStemmer] = None,
+):
     """
     Returns a list of a all words without getting tripped up by a single apostrophe.
     Also, ignore any punctuations.
@@ -26,7 +52,7 @@ def tokenize(doc: str, stop_words: Optional[Set[str]] = None, stemmer: Optional[
     words = re.findall(r"[a-z]+(?:'[a-z]+)?", doc.lower())
     if stop_words:
         words = [w for w in words if w not in stop_words]
-    
+
     if stemmer:
         words = [stemmer.stem_word(w) for w in words]
 
@@ -34,10 +60,18 @@ def tokenize(doc: str, stop_words: Optional[Set[str]] = None, stemmer: Optional[
 
 
 class Classifier:
-    def __init__(self, categories: Iterable[str], alpha: float = 1.0, stop_words: Optional[Iterable[str]] = None, stem: bool = False):
+    def __init__(
+        self,
+        categories: Iterable[str],
+        alpha: float = 1.0,
+        stop_words: Optional[Iterable[str]] = None,
+        stem: bool = False,
+    ):
         self.alpha = float(alpha)
-        self.stop_words = set(stop_words) if stop_words is not None else DEFAULT_STOP_WORDS
-        
+        self.stop_words = (
+            set(stop_words) if stop_words is not None else DEFAULT_STOP_WORDS
+        )
+
         self.stemmer = PorterStemmer() if stem else None
 
         self.categories = list(categories)
